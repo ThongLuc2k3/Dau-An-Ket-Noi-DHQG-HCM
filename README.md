@@ -98,7 +98,7 @@ Server Express phục vụ cả API lẫn `dist/` (SPA fallback cho mọi route 
    - **Root Directory**: để trống (repo root).
    - **Build Command**: `npm install && npm run build`
    - **Start Command**: `node server/index.js`
-   - **Health Check Path**: `/api/dau-an-ket-noi/health`
+   - **Health Check Path**: `/api/dau-an-ket-noi`
 3. **Environment** → khai báo tối thiểu:
    - `DATABASE_URL`, `JWT_SECRET` (bắt buộc, server sẽ crash khi thiếu)
    - `JWT_EXPIRES_IN` (mặc định `7d`), `SERVER_ENV=production`
