@@ -6,7 +6,9 @@ dist
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts
-# Tài liệu dự thi gốc chứa thông tin cá nhân; giữ local, không public.
+# Tài liệu dự thi gốc và asset nguồn (bản gốc/nặng); chỉ giữ local, không public.
+# Bản đã tối ưu cho web nằm trong public/data, đây là kho lưu trữ, không được app dùng.
+/Data/
 02_22120196_ThongLuc_ThuyetMinh_DauAnKetNoi.pdf
 03_22120196_ThongLuc_ThietKe_DauAnKetNoi.png
 04_22120196_ThongLuc_FileGoc_DauAnKetNoi.svg
