@@ -1,0 +1,2 @@
+export const API=import.meta.env.VITE_API_BASE_URL||'http://localhost:4100/api';
+export async function request<T>(path:string,init:RequestInit={}){const headers=new Headers(init.headers),token=localStorage.getItem('dakn_token');if(token)headers.set('Authorization',`Bearer ${token}`);if(init.body&&!(init.body instanceof FormData))headers.set('Content-Type','application/json');const response=await fetch(`${API}${path}`,{...init,headers});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||`API ${response.status}`);return data as T}

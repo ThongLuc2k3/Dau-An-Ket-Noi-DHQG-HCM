@@ -1,0 +1,2 @@
+.scanner-minimal>video{top:46%!important;left:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:min(84vw,calc((100vh - 190px)*1.5),680px)!important;height:auto!important;aspect-ratio:3/2!important;object-fit:cover!important}
+@media(max-width:600px){.scanner-minimal>video{top:45%!important;width:min(92vw,calc((100vh - 180px)*1.5))!important}}

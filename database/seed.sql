@@ -1,0 +1,4 @@
+-- Run after creating an Auth user; replace :owner_id with that user's UUID.
+-- Assets must first be uploaded through the admin UI. The bundled demo remains local-only.
+-- insert into public.events(owner_id,slug,title,partner_name,event_date,description,status)
+-- values (':owner_id','dem-ky-uc-2026','Đêm kết nối 2026','ĐHQG-HCM & Đối tác','2026-08-01','Một khoảnh khắc gặp gỡ được lưu lại.','draft');

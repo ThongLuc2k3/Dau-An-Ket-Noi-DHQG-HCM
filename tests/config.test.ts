@@ -1,0 +1,2 @@
+import{describe,it,expect}from'vitest';import{CV_CONFIG}from'../src/lib/config';import{cosine}from'../src/lib/cv';
+describe('fast embedding match',()=>{it('requires 85 percent cosine similarity and top-1 only',()=>{expect(CV_CONFIG.embeddingThreshold).toBe(.85);expect(CV_CONFIG.topK).toBe(1)});it('computes cosine similarity',()=>{expect(cosine([1,0],[1,0])).toBe(1);expect(cosine([1,0],[0,1])).toBe(0)})});

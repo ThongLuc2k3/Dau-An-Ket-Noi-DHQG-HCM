@@ -1,0 +1,1 @@
+{"mode":"fast-top1","embedding":{"model":"DAKN-grid-gradient","version":"1.0.0","dimension":384,"minimum_cosine_similarity":0.85,"top_k":1},"capture":{"interval_ms":900,"maximum_frame_edge":512},"qr":{"payload":"https://domain.example/e/{slug}","uses_embedding":false}}
