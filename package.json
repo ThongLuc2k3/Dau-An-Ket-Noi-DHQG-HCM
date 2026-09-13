@@ -1,1 +1,43 @@
-{"name":"dau-an-ket-noi","private":true,"version":"1.0.0","type":"module","scripts":{"dev":"vite","dev:server":"node --env-file=server/.env --watch server/index.js","server":"node --env-file=server/.env server/index.js","db:migrate":"node --env-file=server/.env server/migrate.js","build":"tsc -b && vite build","typecheck":"tsc -b","test":"vitest run","preview":"vite preview"},"dependencies":{"@supabase/supabase-js":"^2.57.4","@vitejs/plugin-react":"^4.3.4","bcrypt":"^6.0.0","cloudinary":"^2.10.0","cors":"^2.8.5","express":"^4.19.2","express-rate-limit":"^8.5.2","helmet":"^8.2.0","html5-qrcode":"^2.3.8","jsonwebtoken":"^9.0.2","multer":"^2.2.0","pg":"^8.22.0","qrcode":"^1.5.4","react":"^18.3.1","react-dom":"^18.3.1","react-router-dom":"^7.1.1"},"devDependencies":{"@types/qrcode":"^1.5.5","@types/react":"^18.3.18","@types/react-dom":"^18.3.5","jsdom":"^25.0.1","typescript":"^5.7.2","vite":"^6.0.5","vitest":"^2.1.8"}}
+{
+  "name": "dau-an-ket-noi",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:server": "node --env-file=.env --watch server/index.js",
+    "server": "node --env-file=.env server/index.js",
+    "db:migrate": "node --env-file=.env server/migrate.js",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.10.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.5.2",
+    "google-auth-library": "^10.9.1",
+    "helmet": "^8.2.0",
+    "html5-qrcode": "^2.3.8",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.2.0",
+    "pg": "^8.22.0",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.1"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.6.2",
+    "vite": "^6.1.0",
+    "vitest": "^2.1.8"
+  }
+}

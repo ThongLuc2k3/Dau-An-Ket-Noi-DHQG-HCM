@@ -6,3 +6,9 @@ dist
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts
+# Tài liệu dự thi gốc chứa thông tin cá nhân; giữ local, không public.
+02_22120196_ThongLuc_ThuyetMinh_DauAnKetNoi.pdf
+03_22120196_ThongLuc_ThietKe_DauAnKetNoi.png
+04_22120196_ThongLuc_FileGoc_DauAnKetNoi.svg
+1789278322951_5993851493212155649_5993851493212155649.mp4
+1789278323015_5993851493212155649_5993851493212155649_431fe8af5f05443d96c21c7426afee5d.jpg

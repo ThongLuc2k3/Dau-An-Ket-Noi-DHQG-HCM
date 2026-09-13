@@ -4,13 +4,11 @@ Web mobile-first để quản trị ảnh–video sự kiện, nhận diện th�
 
 ## Đầu vào và demo
 
-- `02_...ThuyetMinh...pdf`: thông điệp, đối tượng, quy cách 100 × 150 mm.
-- `03_...ThietKe...png`: bố cục/màu/phong cách.
-- `04_...FileGoc...svg`: vector tham chiếu thương hiệu.
-- Ảnh seed: `1789278323015_...6afee5d.jpg` (1280 × 720).
-- Video seed: `1789278322951_...5649.mp4` (H.264/AAC, 1280 × 720, 17,51 giây).
+- Tài liệu thuyết minh gốc: thông điệp, đối tượng, quy cách 100 × 150 mm (chỉ lưu local vì có thông tin cá nhân).
+- Bản concept và vector gốc: tham chiếu bố cục, màu sắc và thương hiệu (chỉ lưu local).
+- Ba bộ dữ liệu CNEP: `CNEP-UEL`, `CNEP-USSH` và `CNEP-yeah`, mỗi bộ gồm cover 1280 × 720 và video H.264/AAC tương thích trình duyệt.
 
-Không có biến môi trường, app chạy **demo chỉ đọc** với cặp seed tại `/e/khoanh-khac-ket-noi-2026`. Ghi dữ liệu không bị giả lập: form quản trị yêu cầu backend thật.
+Khi API ngoại tuyến, app vẫn có thể minh họa ba bộ CNEP cục bộ. Đăng ký, đăng nhập, giới hạn quét và ghi dữ liệu yêu cầu backend thật.
 
 ## Kiến trúc
 
@@ -36,7 +34,9 @@ npm run preview
 
 ## Backend Healthy-Skin dùng chung
 
-Credential nằm trong `server/.env` (đã git-ignore). Chạy `npm run db:migrate`, `npm run dev:server` để mở API cổng 4100, rồi `npm run dev` cho frontend. Dữ liệu nằm riêng trong schema PostgreSQL `dau_an_ket_noi`; asset Cloudinary dùng prefix cùng tên. Gemini/Groq không được sử dụng.
+Toàn bộ cấu hình nằm trong một file `.env` ở thư mục gốc (đã git-ignore). Vite chỉ đưa các biến có tiền tố `VITE_` vào frontend; database, JWT và API secret chỉ được backend đọc. Chạy `npm run db:migrate`, `npm run dev:server` để mở API cổng 4100, rồi `npm run dev` cho frontend.
+
+Đăng nhập quản trị tiếp tục dùng `ADMIN_EMAIL` và `ADMIN_PASSWORD`; tài khoản thường có thể đăng ký bằng email/mật khẩu. Để bật Google, khai báo origin frontend (ví dụ `http://localhost:5173`) trong Authorized JavaScript origins và đặt `GOOGLE_CLIENT_ID` trong `.env`. Google account được tạo tự động ở lần đăng nhập đầu.
 
 ## Thiết lập Supabase thay thế
 
@@ -61,7 +61,7 @@ MindAR compiler phải dùng API đúng phiên bản được khóa, tốt nhấ
 
 ## Vector search và confidence gate
 
-Client gửi **vector**, không gửi frame, tới `/api/events/match`; API chỉ xét event active và trả top-1. Ứng dụng mở event khi cosine similarity đạt ít nhất `0,85`. Chế độ nhanh này không tải/chạy OpenCV trong luồng chính. QR bỏ qua embedding và mở trực tiếp event theo slug. Endpoint được rate-limit để tránh lạm dụng.
+Client đã đăng nhập gửi **vector**, không gửi frame, tới `/api/events/match`; API tìm trên toàn bộ event `active` của mọi chủ sở hữu và trả top-1. Vì vậy tài khoản B có thể quét ảnh do A đăng ký, nhưng CRUD kho lưu trữ vẫn giới hạn theo `owner_id`. Endpoint giới hạn mặc định 40 lần/phút cho từng tài khoản; có thể đổi bằng `SCAN_RATE_LIMIT`. Ứng dụng mở event khi cosine similarity đạt ít nhất `0,85`. QR bỏ qua embedding và mở trực tiếp event theo slug.
 
 ## QR, thẻ in và đổi domain
 
