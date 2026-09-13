@@ -83,7 +83,7 @@ MindAR compiler phải dùng API đúng phiên bản được khóa, tốt nhấ
 
 ## Vector search và confidence gate
 
-Client đã đăng nhập gửi **vector**, không gửi frame, tới `/api/events/match`; API tìm trên toàn bộ event `active` của mọi chủ sở hữu và trả top-1. Vì vậy tài khoản B có thể quét ảnh do A đăng ký, nhưng CRUD kho lưu trữ vẫn giới hạn theo `owner_id`. Endpoint giới hạn mặc định 40 lần/phút cho từng tài khoản; có thể đổi bằng `SCAN_RATE_LIMIT`. Ứng dụng mở event khi cosine similarity đạt ít nhất `0,85`. QR bỏ qua embedding và mở trực tiếp event theo slug.
+Client đã đăng nhập gửi **vector**, không gửi frame, tới `/api/events/match`; API tìm trên toàn bộ event `active` của mọi chủ sở hữu và trả top-1. Vì vậy tài khoản B có thể quét ảnh do A đăng ký, nhưng CRUD kho lưu trữ vẫn giới hạn theo `owner_id`. Endpoint giới hạn mặc định 40 lần/phút cho từng tài khoản; có thể đổi bằng `SCAN_RATE_LIMIT`. Client chỉ mở event khi cosine similarity đạt ít nhất `0,75` (`CV_CONFIG.embeddingThreshold`); API luôn trả top-K theo điểm cao nhất, việc chặn theo ngưỡng nằm ở client. QR bỏ qua embedding và mở trực tiếp event theo slug.
 
 ## QR, thẻ in và đổi domain
 
