@@ -4,6 +4,21 @@ export async function embed(source:string|HTMLCanvasElement){let c:HTMLCanvasEle
 export function cosine(a:number[],b:number[]){let d=0,aa=0,bb=0;for(let i=0;i<Math.min(a.length,b.length);i++){d+=a[i]*b[i];aa+=a[i]**2;bb+=b[i]**2}return d/(Math.sqrt(aa*bb)||1)}
 export async function quality(file:File):Promise<QualityResult>{const img=await createImageBitmap(file,{imageOrientation:'from-image'});const c=document.createElement('canvas');c.width=Math.min(img.width,640);c.height=Math.round(img.height*c.width/img.width);const x=c.getContext('2d',{willReadFrequently:true})!;x.drawImage(img,0,0,c.width,c.height);const d=x.getImageData(0,0,c.width,c.height).data;let sum=0,sum2=0,edges=0,prev=0;for(let i=0;i<d.length;i+=4){const y=.299*d[i]+.587*d[i+1]+.114*d[i+2];sum+=y;sum2+=y*y;if(i>4&&Math.abs(y-prev)>28)edges++;prev=y}const n=d.length/4,b=sum/n,contrast=Math.sqrt(sum2/n-b*b),sharpness=Math.min(100,edges/n*550),keypoints=Math.round(edges/7);return{brightness:Math.round(b),contrast:Math.round(contrast),sharpness:Math.round(sharpness),keypoints,verdict:(b<35||b>230||contrast<18||keypoints<80)?'warning':'pass'}}
 type VerifyResult={goodMatches:number;inliers:number;inlierRatio:number;homographyValid:boolean};
+const FAST_COMPARE_SIZE=64;
+const fastRefCache=new Map<string,Promise<Uint8ClampedArray>>();
+function pixels(source:CanvasImageSource){const c=document.createElement('canvas');c.width=FAST_COMPARE_SIZE;c.height=FAST_COMPARE_SIZE;const x=c.getContext('2d',{willReadFrequently:true})!;x.drawImage(source,0,0,c.width,c.height);return x.getImageData(0,0,c.width,c.height).data}
+function referencePixels(referenceUrl:string){
+ let cached=fastRefCache.get(referenceUrl);
+ if(!cached){cached=(async()=>{const img=new Image();img.crossOrigin='anonymous';img.src=referenceUrl;await img.decode();return pixels(img)})().catch(e=>{fastRefCache.delete(referenceUrl);throw e});fastRefCache.set(referenceUrl,cached)}
+ return cached
+}
+/* Ảnh upload thường chính là file cover (hoặc bản JPEG nén lại). So raster 64x64 giúp xác nhận
+   trường hợp gần-trùng trong vài ms; ngưỡng rất cao nên ảnh chụp/crop/phối cảnh vẫn rơi xuống ORB. */
+async function nearDuplicateSimilarity(query:HTMLCanvasElement,referenceUrl:string){
+ const a=pixels(query),b=await referencePixels(referenceUrl);let difference=0;
+ for(let i=0;i<a.length;i+=4)difference+=Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2]);
+ return 1-difference/((a.length/4)*3*255)
+}
 /* ORB/RANSAC là tính toán đồng bộ, nặng cho luồng JS chính — nếu chạy trực tiếp, mỗi lần xác minh
    có thể đơ TOÀN BỘ giao diện (không nút nào bấm được) trong lúc tính, và vì nó chặn luồng chính,
    một timeout kiểu setTimeout() cũng không cứu được (timer không chạy được khi luồng chính đang bận).
@@ -30,6 +45,7 @@ function verifyInWorker(w:Worker,query:HTMLCanvasElement,referenceUrl:string):Pr
  })
 }
 export async function verifyHomography(query:HTMLCanvasElement,referenceUrl:string):Promise<VerifyResult>{
+ try{if(await nearDuplicateSimilarity(query,referenceUrl)>=CV_CONFIG.nearDuplicateThreshold)return{goodMatches:0,inliers:0,inlierRatio:1,homographyValid:true}}catch{/* CORS/network lỗi thì vẫn dùng bộ xác minh hình học bên dưới. */}
  const w=getWorker();
  return w?verifyInWorker(w,query,referenceUrl):verifyHomographyMainThread(query,referenceUrl)
 }

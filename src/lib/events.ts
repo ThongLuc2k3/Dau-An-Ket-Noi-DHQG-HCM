@@ -11,5 +11,6 @@ export function assetUrl(path?:string){return path||''}
 export function videoUrl(path?:string){return path&&/\/(image|video)\/upload\//.test(path)?path.replace('/upload/','/upload/f_auto,q_auto/'):(path||'')}
 export async function publicEvent(slug:string){try{return normalize(await request(`/events/public/${slug}`))}catch(e){const demo=demoEvents.find(event=>event.slug===slug);if(demo)return demo;if((e as Error).message.includes('không tồn tại'))return null;throw e}}
 export async function adminEvents(){try{return(await request<any[]>('/admin/events')).map(normalize)}catch{return demoEvents}}
+export async function adminStats(){return request<{users:number;events:number;active_events:number}>('/admin/stats')}
 export async function saveEvent(input:Partial<EventRecord>,files?:{image?:File;video?:File}){const form=new FormData();form.set('metadata',JSON.stringify(input));if(files?.image)form.set('image',files.image);if(files?.video)form.set('video',files.video);return normalize(await request('/admin/events',{method:'POST',body:form}))}
 export async function setEventStatus(id:string,status:'active'|'inactive'){return normalize(await request(`/admin/events/${id}/status`,{method:'PATCH',body:JSON.stringify({status})}))}
