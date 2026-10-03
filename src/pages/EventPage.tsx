@@ -1,6 +1,6 @@
 import{useEffect,useState}from'react';
 import{Link,useParams}from'react-router-dom';
-import{assetUrl,publicEvent}from'../lib/events';
+import{assetUrl,publicEvent,videoUrl}from'../lib/events';
 import type{EventRecord}from'../types';
 import{Brand}from'../components/Brand';
 
@@ -16,8 +16,8 @@ export default function EventPage({watch=false}:{watch?:boolean}){
 }
 
 function Watch({event}:{event:EventRecord}){
- const src=assetUrl(event.video_path);
- return <main className="watch-page"><img className="watch-logo" src="/brand/vnu-hcm-logo.png" alt="Đại học Quốc gia TP. Hồ Chí Minh"/><Link className="watch-close" to={`/e/${event.slug}`} aria-label="Đóng video">✕</Link><section><video src={src} poster={assetUrl(event.thumbnail_path)} controls playsInline preload="metadata"/><div className="watch-meta"><div><b>{event.title}</b><span>{event.partner_name} · Video có âm thanh stereo</span></div><a className="button secondary download-button" href={src} download><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"/></svg><span>Tải video</span></a></div></section></main>
+ const src=videoUrl(event.video_path),downloadSrc=assetUrl(event.video_path);
+ return <main className="watch-page"><img className="watch-logo" src="/brand/vnu-hcm-logo.png" alt="Đại học Quốc gia TP. Hồ Chí Minh"/><Link className="watch-close" to={`/e/${event.slug}`} aria-label="Đóng video">✕</Link><section><video src={src} poster={assetUrl(event.thumbnail_path)} controls playsInline preload="metadata"/><div className="watch-meta"><div><b>{event.title}</b><span>{event.partner_name} · Video có âm thanh stereo</span></div><a className="button secondary download-button" href={downloadSrc} download><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"/></svg><span>Tải video</span></a></div></section></main>
 }
 
 function State({title,text}:{title:string;text?:string}){return <main className="center-state"><img className="state-logo" src="/brand/vnu-hcm-logo.png" alt="Đại học Quốc gia TP. Hồ Chí Minh"/><h1>{title}</h1>{text&&<p>{text}</p>}<div className="actions"><Link className="button primary" to="/scan">Quét lại</Link><Link className="button secondary" to="/">Về trang đầu</Link></div></main>}
